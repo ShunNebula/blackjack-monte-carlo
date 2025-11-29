@@ -35,6 +35,31 @@ def play_game(strategy) -> int:
     dealer_upcard = dealer.cards[0]
     dealer_up_val = dealer_upcard.value 
 
+    # Проверяем, есть ли у игрока 21 с двух карт
+    is_player_blackjack = (player.get_value() == 21)
+    is_dealer_blackjack = (dealer.get_value() == 21)
+
+    if is_player_blackjack or is_dealer_blackjack:
+        # Сценарий 1: У обоих Блэкджек
+        if is_player_blackjack and is_dealer_blackjack:
+            result = 0 # Ничья (Push)
+
+        # Сценарий 2: Только у игрока Блэкджек
+        if is_player_blackjack and not is_dealer_blackjack:
+            # ВОТ ОНО! Возвращаем 1.5 вместо 1
+            result = 1.5 
+
+        # Сценарий 3: Только у дилера Блэкджек
+        if not is_player_blackjack and is_dealer_blackjack:
+            result = -1
+        
+        return {
+            "player_sum": initial_sum,
+            "dealer_card": dealer_up_val,
+            "did_bust": False,
+            "result": result
+        }
+
     # 3. Цикл хода игрока:
     #    Вместо input() вызываем strategy_func(player.get_value())
     while player.get_value() < 21:
