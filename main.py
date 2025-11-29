@@ -1,4 +1,5 @@
 import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
 from simulation import play_game, strategy
 
@@ -23,12 +24,32 @@ pivot = df.pivot_table(
     aggfunc="mean"
 )
 
-pd.set_option('display.max_columns', None) # Чтобы показать все колонки
-pd.set_option('display.precision', 2)      # 2 знака после запятой
-print("\n--- WIN RATE HEATMAP (Smart Strategy) ---")
-print(pivot)
+# pd.set_option('display.max_columns', None) # Чтобы показать все колонки
+# pd.set_option('display.precision', 2)      # 2 знака после запятой
+# print("\n--- WIN RATE HEATMAP (Smart Strategy) ---")
+# print(pivot)
 
 print(f"\nОбщий Win Rate: {df['result'].mean() * 100:.2f}%")
+
+plt.figure(figsize=(10, 8))
+
+# Рисуем тепловую карту
+sns.heatmap(
+    pivot, 
+    annot=True,
+    fmt=".2f",
+    cmap="RdYlGn",
+    center=0,
+    linewidths=0.5,
+    linecolor='black'
+)
+
+plt.title("Blackjack Strategy Win Rate")
+plt.ylabel("Сумма игрока")
+plt.xlabel("Карта дилера")
+
+# Показать окно с графиком
+plt.show()
 
 # stats = df.groupby("start_sum").agg({
 #     "result": "mean",
