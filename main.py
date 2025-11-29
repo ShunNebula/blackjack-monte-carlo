@@ -15,11 +15,26 @@ for _ in range(N_GAMES):
 
 df = pd.DataFrame(data)
 
-stats = df.groupby("start_sum").agg({
-    "result": "mean",
-    "did_bust": "mean"
-})
-print(stats)
+# Сводная таблица
+pivot = df.pivot_table(
+    index="player_sum", 
+    columns="dealer_card", 
+    values="result", 
+    aggfunc="mean"
+)
 
-stats["result"].plot(kind="bar")
-plt.show()
+pd.set_option('display.max_columns', None) # Чтобы показать все колонки
+pd.set_option('display.precision', 2)      # 2 знака после запятой
+print("\n--- WIN RATE HEATMAP (Smart Strategy) ---")
+print(pivot)
+
+print(f"\nОбщий Win Rate: {df['result'].mean() * 100:.2f}%")
+
+# stats = df.groupby("start_sum").agg({
+#     "result": "mean",
+#     "did_bust": "mean"
+# })
+# print(stats)
+
+# stats["result"].plot(kind="bar")
+# plt.show()

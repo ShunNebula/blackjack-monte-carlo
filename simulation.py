@@ -1,13 +1,13 @@
 from deck import Deck
 from hand import Hand
 
-def strategy(hand_value: int) -> bool:
-    """
-    Возвращает True, если нужно брать карту (Hit).
-    Возвращает False, если нужно остановиться (Stand).
-    Стратегия: Брать, пока меньше 17.
-    """
-    return hand_value < 17
+def strategy(player_sum: int, dealer_card_value: int) -> bool:
+    if player_sum < 12: return True
+
+    if player_sum >= 17: return False
+
+    if dealer_card_value <= 6: return False
+    else: return True 
 
 def play_game(strategy) -> int:
     """
@@ -32,11 +32,14 @@ def play_game(strategy) -> int:
 
     initial_sum = player.get_value()
 
+    dealer_upcard = dealer.cards[0]
+    dealer_up_val = dealer_upcard.value 
+
     # 3. Цикл хода игрока:
     #    Вместо input() вызываем strategy_func(player.get_value())
     while player.get_value() < 21:
-        choice = strategy(player.get_value())
-        if not choice:
+        should_hit = strategy(player.get_value(), dealer_up_val)
+        if not should_hit:
             break
         new_card = deck.deal_card()
         player.add_card(new_card)
@@ -46,7 +49,8 @@ def play_game(strategy) -> int:
     # 4. Если перебор -> return -1
     if did_bust:
         return {
-            "start_sum": initial_sum,
+            "player_sum": initial_sum,
+            "dealer_card": dealer_up_val,
             "did_bust": True,
             "result": -1
         }
@@ -65,7 +69,8 @@ def play_game(strategy) -> int:
     else: result = -1
 
     return {
-        "start_sum": initial_sum,
+        "player_sum": initial_sum,
+        "dealer_card": dealer_up_val,
         "did_bust": False,
         "result":result
     }
