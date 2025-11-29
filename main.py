@@ -29,7 +29,7 @@ pivot = df.pivot_table(
 # print("\n--- WIN RATE HEATMAP (Smart Strategy) ---")
 # print(pivot)
 
-print(f"\nОбщий Win Rate: {df['result'].mean() * 100:.2f}%")
+# print(f"\nОбщий Win Rate: {df['result'].mean() * 100:.2f}%")
 
 plt.figure(figsize=(10, 8))
 
@@ -44,7 +44,7 @@ sns.heatmap(
     linecolor='black'
 )
 
-plt.title("Blackjack Strategy Win Rate")
+plt.title(f"Blackjack Strategy Win Rate {df['result'].mean() * 100:.2f}%")
 plt.ylabel("Сумма игрока")
 plt.xlabel("Карта дилера")
 
